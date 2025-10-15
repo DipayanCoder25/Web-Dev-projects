@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Bartle&family=Playwrite+US+Modern:wght@100..400&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+        body {
+            background-color: mediumaquamarine;
+            font-family: "Roboto Mono", monospace;
+        }
+
+        h1 {
+            width: 200px;
+            text-align: center;
+            margin: 30px auto;
+            font-weight: bold;
+            background-color: aquamarine;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        #norml {
+            text-align: center;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 300px;
+            max-width: 90%;
+        }
+
+        #gen, #hbc {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #gen {
+            color: blueviolet;
+        }
+
+        #hbc {
+            color: rgba(234, 12, 230, 0.62);
+        }
+
+        option {
+            text-align: center;
+            font-weight: bold;
+            color: deeppink;
+        }
+
+        select {
+            text-align: center;
+        }
+
+        #login {
+            width: 150px;
+            height: 50px;
+            background-color: blueviolet;
+            color: white;
+            margin: 30px auto;
+            padding: 10px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            display: block;
+            border: none;
+        }
+
+        #login:hover {
+            background-color: limegreen;
+            color: darkblue;
+            cursor: pointer;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        p.description {
+            text-align: center;
+            color: turquoise;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Register</h1>
+    <p class="description">Make an account to use many amazing features!</p>
+
+    <form action="#" method="post">
+        <div id="norml">
+            <label>Enter your full name:</label>
+            <input type="text" name="fullname" required>
+
+            <label>Enter your username:</label>
+            <input type="text" name="username" required>
+
+            <label>Enter your email:</label>
+            <input type="email" name="email" required placeholder="abc@gmail.com">
+
+            <label>Enter your mobile number:</label>
+            <input type="text" name="mobile" required placeholder="+880xxxxxx">
+
+            <label>Enter your password:</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <div id="gen">
+            <p><b>------ Gender ------</b></p>
+            <input type="radio" name="gender" value="male" required> Male
+            <input type="radio" name="gender" value="female"> Female
+            <input type="radio" name="gender" value="other"> Others
+        </div>
+
+        <div id="hbc">
+            <p><b>------ Hobbies ------</b></p>
+            <input type="checkbox" name="hobbies" value="reading"> Reading<br>
+            <input type="checkbox" name="hobbies" value="travelling"> Travelling<br>
+            <input type="checkbox" name="hobbies" value="gaming"> Gaming<br>
+            <input type="checkbox" name="hobbies" value="gardening"> Gardening
+        </div>
+
+        <br>
+        <label><p style="color:blue;text-align:center">Country</p></label>
+        <select name="country" required>
+            <option value="">Select Country</option>
+            <option value="Bangladesh">Bangladesh</option>
+            <option value="India">India</option>
+            <option value="Pakistan">Pakistan</option>
+            <option value="Nepal">Nepal</option>
+            <option value="Bhutan">Bhutan</option>
+        </select>
+
+        <button type="submit" id="login">Submit</button>
+    </form>
+
+</body>
+</html>
