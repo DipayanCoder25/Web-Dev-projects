@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Picture Layout with Position</title>
+  <style>
+    .container {
+      position: relative;
+      width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Each box (acts like your picture) */
+    .pic1, .pic2, .pic3 {
+    	background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwkyYLllsr4U6BUGMYKsQIoazSk-qkJ42bvA&s");
+      position: relative;
+      width: 200px;
+      height: 200px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    /* Second picture beside first */
+    .pic2 {
+      position: absolute;
+      left: 220px;
+      top: 0;
+    }
+
+    /* Third picture below both */
+    .pic3 {
+      top: 20px;
+      left: 100px;
+    }
+
+    /* Move only the text */
+    .move-text {
+      position: relative;
+      top: 30px;   /* move text down */
+      left: 20px;  /* move text right */
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <p class="pic1"><span class="move-text">Image 1</span></p>
+    <p class="pic2"><span class="move-text">Image 2</span></p>
+    <p class="pic3"><span class="move-text">Image 3</span></p>
+  </div>
+
+</body>
+</html>
