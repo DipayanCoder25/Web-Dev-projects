@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head><title> JavaScript Function !! </title>
+
+		<meta charset="UTF-8">
+	</head>
+	<body>
+
+		Name: <input type="text" id="name"><br>
+		Amount: <input type="number" id="amount"><br>
+		Branch: <input type="text" id="branch"><br>
+
+
+		<button onclick="SubmiAccount()">Submit</button>
+		<button  type="button" onclick="MyFunction()">Click me</button>
+		<p id="output">  </p>
+		<p id="demo"></p>
+		<script>
+			var b=5;
+			function SubmiAccount(){
+				
+				let name=document.getElementById("name").value;
+				let amount=document.getElementById("amount").value;
+				let branch=document.getElementById("branch").value;
+
+				showAccount(name,amount,branch);
+			}	
+
+			function showAccount(name,amount,branch){
+
+				document.getElementById("output").innerHTML="<b> Name </b>" + name + "<b> Amount </b>" + amount + "<b> branch </b>" + branch + "<br>";  
+			}
+			function  MyFunction(){
+				
+				var a = 4;
+				document.getElementById("demo").innerHTML= b * a;
+			}
+
+		</script>
+
+
+	</body>
+
+</html>
