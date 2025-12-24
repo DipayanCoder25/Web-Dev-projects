@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head> 
+	<title>Methods Loops in Javascript</title>
+</head>
+<body>
+
+	
+
+
+	<script>
+
+			var marks=[78,97,69];
+
+			for(var i=0;i<marks.length;i++)
+			{
+				if(marks[i]>=80){
+					document.write("Student "+(i+1) +"Grade A+  <br>");
+				}
+				else if(marks[i]>=70){
+					document.write("Student "+(i+1) +"Grade A  <br> ");
+				}
+				else{
+					document.write("Student "+(i+1) + "Bad Student <br>");
+				}
+			}
+
+			var day;
+			switch(new Date().getDay()){
+
+				case 0:
+					day="Sunday";
+					break;
+
+				
+			case 1:
+			day="Monday";
+			break;
+			case 2:
+			day="Tuesday";
+			break;
+			case 3:
+			day="Wednessday";
+			break;
+			case 4:
+			day="Thursday";
+			break;
+			case 5:
+			day="Friday";
+			break;
+			case 6:
+			day="Saturday";
+			break;
+		}
+		document.write(day);
+			</script>
+</body>
+</html>
