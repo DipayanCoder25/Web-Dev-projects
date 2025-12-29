@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scientific Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.calculator {
+    width: 360px;
+    background: #111;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+}
+
+.display {
+    background: #000;
+    color: #0f0;
+    font-size: 1.8rem;
+    text-align: right;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow-x: auto;
+}
+
+.btn {
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.btn-dark {
+    background: #222;
+    border: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <div id="display" class="display">0</div>
+
+    <div class="row g-2">
+        <div class="col-3"><button class="btn btn-danger w-100" onclick="clearDisplay()">AC</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('(')">(</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add(')')">)</button></div>
+        <div class="col-3"><button class="btn btn-warning w-100" onclick="add('/')">÷</button></div>
+
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('sin(')">sin</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('cos(')">cos</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('tan(')">tan</button></div>
+        <div class="col-3"><button class="btn btn-warning w-100" onclick="add('*')">×</button></div>
+
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('log(')">log</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('ln(')">ln</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('sqrt(')">√</button></div>
+        <div class="col-3"><button class="btn btn-warning w-100" onclick="add('-')">−</button></div>
+
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('7')">7</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('8')">8</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('9')">9</button></div>
+        <div class="col-3"><button class="btn btn-warning w-100" onclick="add('+')">+</button></div>
+
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('4')">4</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('5')">5</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('6')">6</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="square()">x²</button></div>
+
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('1')">1</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('2')">2</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('3')">3</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('3.1416')">π</button></div>
+
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('0')">0</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('.')">.</button></div>
+        <div class="col-3"><button class="btn btn-dark w-100" onclick="add('2.718')">e</button></div>
+        <div class="col-3"><button class="btn btn-success w-100" onclick="calculate()">=</button></div>
+    </div>
+</div>
+
+<script>
+let display = document.getElementById("display");
+
+
+function add(value) {
+    if (display.innerText === "0") {
+        display.innerText = value;
+    } else {
+        display.innerText = display.innerText + value;
+    }
+}
+
+function clearDisplay() {
+    display.innerText = "0";
+}
+
+
+function square() {
+    let num = display.innerText;
+    let result = num * num;
+    display.innerText = result;
+}
+
+
+function hasWord(text, word) {
+    let i = 0;
+    let j = 0;
+
+    while (i < text.length) {
+        if (text[i] === word[j]) {
+            j++;
+            if (j === word.length) {
+                return true;
+            }
+        } else {
+            j = 0;
+        }
+        i++;
+    }
+    return false;
+}
+
+
+function calculate() {
+    let exp = display.innerText;
+
+    if (hasWord(exp, "sin(")) {
+        exp = exp.replace("sin(", "Math.sin(");
+    } 
+    else if (hasWord(exp, "cos(")) {
+        exp = exp.replace("cos(", "Math.cos(");
+    } 
+    else if (hasWord(exp, "tan(")) {
+        exp = exp.replace("tan(", "Math.tan(");
+    } 
+    else if (hasWord(exp, "log(")) {
+        exp = exp.replace("log(", "Math.log10(");
+    } 
+    else if (hasWord(exp, "ln(")) {
+        exp = exp.replace("ln(", "Math.log(");
+    } 
+    else if (hasWord(exp, "sqrt(")) {
+        exp = exp.replace("sqrt(", "Math.sqrt(");
+    }
+
+    let result = eval(exp);
+
+    if (result === Infinity || result === -Infinity || isNaN(result)) {
+        display.innerText = "Error";
+    } else {
+        display.innerText = result;
+    }
+}
+</script>
+
+</body>
+</html>
