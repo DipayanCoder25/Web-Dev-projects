@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Finding the Largest Number in an Array</title>
+
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: rgb(199, 240, 223);
+      padding-top: 40px;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <p id="result"></p>
+
+  <button onclick="showArray(arry3)">
+    Click to see the Array Values
+  </button>
+
+  <button onclick="showLargestValue()">
+    Click to see the Largest Value
+  </button>
+
+  <script>
+    const arry3 = [106, 305, 350, 360, 231, 372];
+
+    function showArray(arry) {
+      document.getElementById("result").innerHTML =
+        "Array values: " + arry.join(" ");
+    }
+
+    function findMax(arry) {
+      let max = arry[0];
+      for (let i = 1; i < arry.length; i++) {
+        if (arry[i] > max) {
+          max = arry[i];
+        }
+      }
+      return max;
+    }
+
+    function showLargestValue() {
+      const maxValue = findMax(arry3);
+      document.getElementById("result").innerHTML =
+        "Largest value in the array is: " + maxValue;
+    }
+  </script>
+
+</body>
+</html>
