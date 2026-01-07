@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Object & Array Demo</title>
+
+<style>
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        background:#f4f4f4;
+        padding:20px;
+    }
+
+    .box{
+        background:white;
+        padding:20px;
+        border-radius:8px;
+        margin-bottom:20px;
+        box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2{
+        color:#333;
+        margin-bottom:10px;
+    }
+
+    p{
+        margin:6px 0;
+        color:#444;
+    }
+
+    button{
+        padding:10px 16px;
+        border:none;
+        background:#007bff;
+        color:white;
+        border-radius:5px;
+        cursor:pointer;
+    }
+
+    button:hover{
+        background:#0056b3;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Object Values (Using Keys)</h2>
+    <div id="objectOutput"></div>
+</div>
+
+<div class="box">
+    <h2>Array Values (Using Index)</h2>
+    <div id="arrayOutput"></div>
+</div>
+
+<div class="box">
+    <h2>Array Methods</h2>
+    <button onclick="runMethods()">Run Array Methods</button>
+    <div id="methodOutput"></div>
+</div>
+
+<script>
+    // OBJECT
+    const student = {
+        name: "Dipu",
+        age: 14,
+        class: "8",
+        country: "Bangladesh"
+    };
+
+    let objText = "";
+    for (let key in student) {
+        objText += `<p><b>${key}</b> : ${student[key]}</p>`;
+    }
+    document.getElementById("objectOutput").innerHTML = objText;
+
+    // ARRAY
+    const numbers = [10, 20, 30, 40, 50];
+
+    let arrText = "";
+    for (let i = 0; i < numbers.length; i++) {
+        arrText += `<p>Index ${i} : ${numbers[i]}</p>`;
+    }
+    document.getElementById("arrayOutput").innerHTML = arrText;
+
+    // ARRAY METHODS
+    function runMethods(){
+        let arr = [1, 2, 3, 4, 5];
+
+        arr.push(6);       // add element
+        arr.pop();         // remove last
+        let doubled = arr.map(n => n * 2);
+        let filtered = arr.filter(n => n > 2);
+
+        document.getElementById("methodOutput").innerHTML = `
+            <p><b>Original Array:</b> ${arr}</p>
+            <p><b>Mapped (x2):</b> ${doubled}</p>
+            <p><b>Filtered (>2):</b> ${filtered}</p>
+        `;
+    }
+</script>
+
+</body>
+</html>
