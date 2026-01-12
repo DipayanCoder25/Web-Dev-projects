@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML DOM - Objects & Arrays</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #00b4d8;
+        }
+        
+        h1 {
+            color: #00b4d8;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #90e0ef;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .date {
+            background: rgba(0, 180, 216, 0.1);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 180, 216, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-title {
+            color: #00b4d8;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            font-size: 1.5rem;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section h3 {
+            color: #90e0ef;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .output-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #00b4d8;
+            font-family: 'Courier New', monospace;
+            min-height: 60px;
+            word-break: break-all;
+        }
+        
+        .code {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #4cc9f0;
+            overflow-x: auto;
+        }
+        
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            background: #00b4d8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #0096c7;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #4361ee;
+        }
+        
+        .btn-secondary:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-array {
+            background: #7209b7;
+        }
+        
+        .btn-array:hover {
+            background: #5a08a5;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #90e0ef;
+            font-size: 0.9rem;
+        }
+        
+        .highlight {
+            color: #f72585;
+            font-weight: bold;
+        }
+        
+        .key {
+            color: #4cc9f0;
+        }
+        
+        .value {
+            color: #f72585;
+        }
+        
+        .array-index {
+            color: #ff9e00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Introduction to HTML DOM</h1>
+            <p class="subtitle">Working with Objects and Arrays in JavaScript</p>
+            <div class="date">
+                <i class="far fa-clock"></i> 11:59 PM BST, Jan 12, 2026
+            </div>
+        </header>
+        
+        <div class="content">
+            <!-- Objects Section -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-cube"></i> Working with Objects</h2>
+                
+                <div class="section">
+                    <h3>Student Object</h3>
+                    <div class="code">
+const student = {<br>
+&nbsp;&nbsp;name: "Alex Johnson",<br>
+&nbsp;&nbsp;age: 22,<br>
+&nbsp;&nbsp;course: "Computer Science",<br>
+&nbsp;&nbsp;grade: "A",<br>
+&nbsp;&nbsp;hobbies: ["Coding", "Reading", "Gaming"]<br>
+};
+                    </div>
+                    
+                    <div class="actions">
+                        <button class="btn" onclick="displayObjectProperties()">
+                            <i class="fas fa-eye"></i> Display Object Properties
+                        </button>
+                        <button class="btn btn-secondary" onclick="displaySpecificProperty()">
+                            <i class="fas fa-key"></i> Display by Key
+                        </button>
+                    </div>
+                    
+                    <h3>Object Output</h3>
+                    <div id="object-output" class="output-box">
+                        Click a button to display object data here
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Arrays Section -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-layer-group"></i> Working with Arrays</h2>
+                
+                <div class="section">
+                    <h3>Programming Languages Array</h3>
+                    <div class="code">
+const languages = ["JavaScript", "Python", "Java", "C++", "Ruby", "PHP"];
+                    </div>
+                    
+                    <div class="actions">
+                        <button class="btn btn-array" onclick="displayFullArray()">
+                            <i class="fas fa-list"></i> Display Full Array
+                        </button>
+                        <button class="btn btn-secondary" onclick="displayByIndex()">
+                            <i class="fas fa-hashtag"></i> Display by Index
+                        </button>
+                        <button class="btn" onclick="useJoinMethod()">
+                            <i class="fas fa-link"></i> Use Join Method
+                        </button>
+                        <button class="btn" onclick="usePopMethod()">
+                            <i class="fas fa-minus-circle"></i> Use Pop Method
+                        </button>
+                    </div>
+                    
+                    <h3>Array Output</h3>
+                    <div id="array-output" class="output-box">
+                        Click a button to display array data here
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Combined Section -->
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-code"></i> Combined Example</h2>
+            
+            <div class="section">
+                <h3>Array of Objects</h3>
+                <div class="code">
+const students = [<br>
+&nbsp;&nbsp;{ name: "Alex", age: 22, grade: "A" },<br>
+&nbsp;&nbsp;{ name: "Maria", age: 21, grade: "B+" },<br>
+&nbsp;&nbsp;{ name: "John", age: 23, grade: "A-" },<br>
+&nbsp;&nbsp;{ name: "Sarah", age: 20, grade: "B" }<br>
+];
+                </div>
+                
+                <div class="actions">
+                    <button class="btn" onclick="displayArrayOfObjects()">
+                        <i class="fas fa-users"></i> Display Array of Objects
+                    </button>
+                    <button class="btn btn-secondary" onclick="displayFirstStudent()">
+                        <i class="fas fa-user-graduate"></i> Display First Student
+                    </button>
+                </div>
+                
+                <h3>Combined Output</h3>
+                <div id="combined-output" class="output-box">
+                    Click a button to display combined data here
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>This project demonstrates DOM manipulation with JavaScript objects and arrays.</p>
+            <p>Using <span class="highlight">object keys</span>, <span class="highlight">array index values</span>, <span class="highlight">join()</span> and <span class="highlight">pop()</span> methods.</p>
+        </div>
+    </div>
+
+    <script>
+        // Define our objects and arrays
+        const student = {
+            name: "Alex Johnson",
+            age: 22,
+            course: "Computer Science",
+            grade: "A",
+            hobbies: ["Coding", "Reading", "Gaming"]
+        };
+        
+        const languages = ["JavaScript", "Python", "Java", "C++", "Ruby", "PHP"];
+        
+        const students = [
+            { name: "Alex", age: 22, grade: "A" },
+            { name: "Maria", age: 21, grade: "B+" },
+            { name: "John", age: 23, grade: "A-" },
+            { name: "Sarah", age: 20, grade: "B" }
+        ];
+        
+        // Object Functions
+        function displayObjectProperties() {
+            let output = "<h4>All Object Properties:</h4>";
+            
+            // Using Object.keys() to get all keys
+            const keys = Object.keys(student);
+            
+            keys.forEach(key => {
+                output += `<div><span class="key">${key}:</span> <span class="value">${student[key]}</span></div>`;
+            });
+            
+            document.getElementById("object-output").innerHTML = output;
+        }
+        
+        function displaySpecificProperty() {
+            // Get a random key from the object
+            const keys = Object.keys(student);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            
+            const output = `<h4>Displaying by Key:</h4>
+                           <div><span class="key">${randomKey}:</span> <span class="value">${student[randomKey]}</span></div>
+                           <p><em>Random key selected: "${randomKey}"</em></p>`;
+            
+            document.getElementById("object-output").innerHTML = output;
+        }
+        
+        // Array Functions
+        function displayFullArray() {
+            let output = "<h4>Full Array:</h4>";
+            output += `<div>${languages}</div>`;
+            output += `<p><em>Array length: ${languages.length}</em></p>`;
+            
+            document.getElementById("array-output").innerHTML = output;
+        }
+        
+        function displayByIndex() {
+            // Display array elements with their index
+            let output = "<h4>Array Elements by Index:</h4>";
+            
+            for (let i = 0; i < languages.length; i++) {
+                output += `<div><span class="array-index">[${i}]</span> = "${languages[i]}"</div>`;
+            }
+            
+            document.getElementById("array-output").innerHTML = output;
+        }
+        
+        function useJoinMethod() {
+            // Using join() to convert array to string
+            const joinedString = languages.join(" | ");
+            
+            const output = `<h4>Using join() method:</h4>
+                           <div>"${joinedString}"</div>
+                           <p><em>Array joined with " | " separator</em></p>`;
+            
+            document.getElementById("array-output").innerHTML = output;
+        }
+        
+        function usePopMethod() {
+            // Create a copy of the array to avoid modifying the original
+            const languagesCopy = [...languages];
+            
+            // Using pop() to remove last element
+            const removedElement = languagesCopy.pop();
+            
+            const output = `<h4>Using pop() method:</h4>
+                           <div>Removed element: <span class="value">"${removedElement}"</span></div>
+                           <div>New array: [${languagesCopy.join(", ")}]</div>
+                           <p><em>Original array unchanged: [${languages.join(", ")}]</em></p>`;
+            
+            document.getElementById("array-output").innerHTML = output;
+        }
+        
+        // Combined Functions
+        function displayArrayOfObjects() {
+            let output = "<h4>Array of Student Objects:</h4>";
+            
+            students.forEach((student, index) => {
+                output += `<div><span class="array-index">Student ${index + 1}:</span> `;
+                output += `<span class="key">Name:</span> ${student.name}, `;
+                output += `<span class="key">Age:</span> ${student.age}, `;
+                output += `<span class="key">Grade:</span> ${student.grade}</div>`;
+            });
+            
+            document.getElementById("combined-output").innerHTML = output;
+        }
+        
+        function displayFirstStudent() {
+            // Accessing first element by index [0]
+            const firstStudent = students[0];
+            
+            const output = `<h4>First Student (Index 0):</h4>
+                           <div><span class="key">Name:</span> ${firstStudent.name}</div>
+                           <div><span class="key">Age:</span> ${firstStudent.age}</div>
+                           <div><span class="key">Grade:</span> ${firstStudent.grade}</div>
+                           <p><em>Accessed using students[0]</em></p>`;
+            
+            document.getElementById("combined-output").innerHTML = output;
+        }
+        
+        // Initialize with some content
+        window.onload = function() {
+            displayObjectProperties();
+            displayFullArray();
+            displayArrayOfObjects();
+        };
+    </script>
+</body>
+</html>
