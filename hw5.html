@@ -1,25 +1,321 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Some talks abt cricket!!  </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Printer with While Loop</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: rgba(30, 30, 46, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4cc9f0;
+        }
+        
+        h1 {
+            color: #4cc9f0;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            color: #a9a9b8;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .code-explanation {
+            background-color: #1e1e2e;
+            border-left: 5px solid #4361ee;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .code-explanation h3 {
+            color: #4361ee;
+            margin-bottom: 10px;
+        }
+        
+        .code-explanation p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .code-explanation code {
+            background-color: #2d2d44;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #f72585;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #25253a;
+            border-radius: 10px;
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4cc9f0;
+            font-weight: 600;
+        }
+        
+        input, select, button {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1rem;
+        }
+        
+        input, select {
+            background-color: #1a1a2e;
+            color: #f8f9fa;
+            border: 1px solid #4361ee;
+        }
+        
+        input:focus, select:focus {
+            outline: 2px solid #4cc9f0;
+        }
+        
+        button {
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #3a0ca3, #4361ee);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .output {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #1a1a2e;
+            border-radius: 10px;
+            min-height: 200px;
+        }
+        
+        .output h3 {
+            color: #f72585;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #randomNumbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .number-box {
+            background: linear-gradient(135deg, #7209b7, #f72585);
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        
+        .number-box:hover {
+            transform: scale(1.1);
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #a9a9b8;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #3a3a5d;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+               
+
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-	<header>Cricket</header>
-	<section>
-	<section>
-	<nav>
-		<h3>How played?</h3>
-		<em>Cricket is a bat-and-ball game that is played between two teams of eleven players on a field, at the centre of which is a <mark>22-yard (20-metre; 66-foot) pitch </mark> with a wicket at each end, each comprising two bails (small sticks) balanced on three stumps</em><br>. Two players from the batting team, the striker and nonstriker, stand in front of either wicket holding bats, while one player from the fielding team, the bowler, bowls the ball toward the striker's wicket from the opposite end of the pitch<br>
+    <div class="container">
+        <header>
+            <h1>Random Number Printer</h1>
+            <p class="subtitle">This project demonstrates printing a set of random numbers using a <code>while</code> loop with the <code>let</code> keyword in JavaScript. Adjust the parameters below and generate random numbers!</p>
+        </header>
+        
+        <div class="code-explanation">
+            <h3>How It Works</h3>
+            <p>This program uses a <code>while</code> loop to generate a specified number of random values. The <code>let</code> keyword is used to declare the loop counter variable, which is block-scoped to the loop.</p>
+            <p>Each iteration generates a random number within the specified range and displays it visually on the screen. You can control how many numbers to generate and their minimum/maximum values.</p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="count">Number of Values:</label>
+                <input type="number" id="count" min="1" max="50" value="10">
+            </div>
+            
+            <div class="control-group">
+                <label for="min">Minimum Value:</label>
+                <input type="number" id="min" value="1">
+            </div>
+            
+            <div class="control-group">
+                <label for="max">Maximum Value:</label>
+                <input type="number" id="max" value="100">
+            </div>
+            <div class></div>
+            <div class="control-group">
+                <label for="type">Number Type:</label>
+                <select id="type">
+                    <option value="integer">Integers</option>
+                    <option value="decimal">Decimals</option>
+                </select>
+            </div>
+        </div>
+        
+        <button id="generateBtn">Generate Random Numbers</button>
+        
+        <div class="output">
+            <h3>Generated Numbers <span id="stats">Click "Generate Random Numbers" to start</span></h3>
+            <div id="randomNumbers"></div>
+        </div>
+        
+    </div>
+    
+    <footer>
+        <p>Project: Printing Random Numbers with While Loop and Let Keyword | JavaScript Practice</p>
+    </footer>
 
-	</nav>
-</section>
-	<div>
-
-		<h1>History</h1>
-		<p>Cricket is one of many games in the "club ball" sphere that involve hitting a ball with a hand-held implement. Others include baseball (which shares many similarities with cricket, both belonging in the more specific bat-and-ball games category[6]), golf, hockey, tennis, squash, badminton and table tennis.[7] In cricket's case, a key difference is the existence of a solid target structure, the wicket (originally, it is thought, a "wicket gate" through which sheep were herded), that the batter must defend.[8] The cricket historian Harry Altham identified three "groups" of "club ball" games: the "hockey group", in which the ball is driven to and from between two targets (the goals); the "golf group", in which the ball is driven towards an undefended target (the hole); and the "cricket group", in which "the ball is aimed at a mark (the wicket) and driven away from it"
-		</p>
-	</div>
-</section>
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', generateRandomNumbers);
+        
+        function generateRandomNumbers() {
+            // Get user inputs
+            let count = document.getElementById('count').value;
+            let min = parseFloat(document.getElementById('min').value);
+            let max = parseFloat(document.getElementById('max').value);
+            let type = document.getElementById('type').value;
+            
+            // Validate inputs
+            if (isNaN(min) || isNaN(max) || min >= max) {
+                alert("Please enter valid minimum and maximum values where min < max.");
+                return;
+            }
+            
+            if (count < 1 || count > 50) {
+                alert("Please enter a count between 1 and 50.");
+                return;
+            }
+            
+            // Clear previous results
+            let outputDiv = document.getElementById('randomNumbers');
+            outputDiv.innerHTML = '';
+            
+            // Initialize counter using let (block-scoped)
+            let i = 0;
+            
+            // While loop to generate numbers
+            while (i < count) {
+                // Generate random number based on selected type
+                let randomNum;
+                if (type === 'integer') {
+                    randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+                } else {
+                    randomNum = (Math.random() * (max - min)) + min;
+                    randomNum = randomNum.toFixed(2);
+                }
+                
+                // Create and append number element
+                let numberElement = document.createElement('div');
+                numberElement.className = 'number-box';
+                numberElement.textContent = randomNum;
+                outputDiv.appendChild(numberElement);
+                
+                // Increment counter
+                i++;
+            }
+            
+            // Update statistics
+            document.getElementById('stats').textContent = 
+                `Generated ${count} ${type} numbers between ${min} and ${max}`;
+        }
+        
+        // Generate initial random numbers on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            generateRandomNumbers();
+        });
+    </script>
 </body>
-
 </html>
