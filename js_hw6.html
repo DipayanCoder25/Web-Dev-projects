@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Inheritance & Static Methods Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card h2 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2 i {
+            color: #6a11cb;
+        }
+        
+        .code-block {
+            background-color: #2d3a4b;
+            color: #e1e1e6;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        
+        .code-keyword {
+            color: #ff79c6;
+        }
+        
+        .code-function {
+            color: #50fa7b;
+        }
+        
+        .code-variable {
+            color: #f1fa8c;
+        }
+        
+        .code-string {
+            color: #f1fa8c;
+        }
+        
+        .code-comment {
+            color: #6272a4;
+        }
+        
+        .demo-area {
+            background: #f9f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #6a11cb;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+        
+        button.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        button.secondary:hover {
+            background: #e0e0e0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .output {
+            background-color: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #d1d9ff;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .output h3 {
+            color: #6a11cb;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #d1d9ff;
+        }
+        
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 10px;
+        }
+        
+        .explanation h3 {
+            color: #2575fc;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .note {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2575fc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-project-diagram"></i> Class Inheritance & Static Methods</h1>
+        <p class="subtitle">Learn how to create classes with static methods and implement inheritance in JavaScript. See live examples and interact with the code!</p>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2><i class="fas fa-code"></i> JavaScript Classes</h2>
+            <p>This example demonstrates creating a base class with a static method, then creating a subclass that inherits from it.</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">class</span> <span class="code-function">Animal</span> {
+                    <span class="code-comment">// Constructor to initialize properties</span>
+                    <span class="code-function">constructor</span>(name, age) {
+                        <span class="code-keyword">this</span>.name = name;
+                        <span class="code-keyword">this</span>.age = age;
+                    }
+                    
+                    <span class="code-comment">// Instance method</span>
+                    <span class="code-function">speak</span>() {
+                        <span class="code-keyword">return</span> <span class="code-string">`<span class="code-variable">${this.name}</span> makes a sound.`</span>;
+                    }
+                    
+                    <span class="code-comment">// Static method - belongs to the class itself</span>
+                    <span class="code-keyword">static</span> <span class="code-function">info</span>() {
+                        <span class="code-keyword">return</span> <span class="code-string">"This is the Animal class. It represents animals."</span>;
+                    }
+                }
+                
+                <span class="code-comment">// Dog class inherits from Animal</span>
+                <span class="code-keyword">class</span> <span class="code-function">Dog</span> <span class="code-keyword">extends</span> Animal {
+                    <span class="code-function">constructor</span>(name, age, breed) {
+                        <span class="code-comment">// Call parent class constructor</span>
+                        <span class="code-keyword">super</span>(name, age);
+                        <span class="code-keyword">this</span>.breed = breed;
+                    }
+                    
+                    <span class="code-comment">// Override the speak method</span>
+                    <span class="code-function">speak</span>() {
+                        <span class="code-keyword">return</span> <span class="code-string">`<span class="code-variable">${this.name}</span> the <span class="code-variable">${this.breed}</span> says: Woof! Woof!`</span>;
+                    }
+                    
+                    <span class="code-comment">// New method specific to Dog class</span>
+                    <span class="code-function">fetch</span>() {
+                        <span class="code-keyword">return</span> <span class="code-string">`<span class="code-variable">${this.name}</span> is fetching the ball!`</span>;
+                    }
+                }
+            </div>
+            
+            <div class="explanation">
+                <h3><i class="fas fa-lightbulb"></i> Explanation</h3>
+                <p><span class="highlight">Static methods</span> are called on the class itself, not on instances of the class. They are often used for utility functions.</p>
+                <p><span class="highlight">Inheritance</span> allows a class (Dog) to inherit properties and methods from another class (Animal). The <code>extends</code> keyword is used for inheritance.</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-play-circle"></i> Live Demo</h2>
+            <p>Create instances of the classes and see the results in real-time.</p>
+            
+            <div class="demo-area">
+                <h3>Interact with the Classes</h3>
+                <p>Click the buttons below to see how the classes work:</p>
+                
+                <div class="controls">
+                    <button id="createAnimal">
+                        <i class="fas fa-plus-circle"></i> Create Animal
+                    </button>
+                    <button id="createDog">
+                        <i class="fas fa-dog"></i> Create Dog
+                    </button>
+                    <button id="callStaticMethod">
+                        <i class="fas fa-bolt"></i> Call Static Method
+                    </button>
+                    <button id="callInheritedMethod">
+                        <i class="fas fa-exchange-alt"></i> Call Inherited Method
+                    </button>
+                    <button id="clearOutput" class="secondary">
+                        <i class="fas fa-trash-alt"></i> Clear Output
+                    </button>
+                </div>
+                
+                <div class="output" id="output">
+                    <h3>Output:</h3>
+                    <p id="outputText">Click the buttons above to see the results here...</p>
+                </div>
+            </div>
+            
+            <div class="note">
+                <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> The Animal class has a static method called <code>info()</code> that can be accessed directly from the class (Animal.info()). The Dog class inherits from Animal and overrides the <code>speak()</code> method.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Class Inheritance & Static Methods Demo | Created for learning JavaScript classes</p>
+        <p>Try modifying the code in your browser's console to experiment further!</p>
+    </footer>
+
+    <script>
+        // Base class with static method
+        class Animal {
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+            
+            speak() {
+                return `${this.name} makes a sound.`;
+            }
+            
+            static info() {
+                return "This is the Animal class. It represents animals.";
+            }
+        }
+        
+        // Dog class inherits from Animal
+        class Dog extends Animal {
+            constructor(name, age, breed) {
+                super(name, age);
+                this.breed = breed;
+            }
+            
+            speak() {
+                return `${this.name} the ${this.breed} says: Woof! Woof!`;
+            }
+            
+            fetch() {
+                return `${this.name} is fetching the ball!`;
+            }
+        }
+        
+        // Variables to store our instances
+        let myAnimal = null;
+        let myDog = null;
+        
+        // Get the output elements
+        const outputDiv = document.getElementById('output');
+        const outputText = document.getElementById('outputText');
+        
+        // Button event handlers
+        document.getElementById('createAnimal').addEventListener('click', function() {
+            myAnimal = new Animal("Leo", 3);
+            outputText.innerHTML = `Created a new Animal instance:<br>Name: ${myAnimal.name}, Age: ${myAnimal.age} years<br><br>Calling speak() method: ${myAnimal.speak()}`;
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        });
+        
+        document.getElementById('createDog').addEventListener('click', function() {
+            myDog = new Dog("Max", 5, "Golden Retriever");
+            outputText.innerHTML = `Created a new Dog instance:<br>Name: ${myDog.name}, Age: ${myDog.age} years, Breed: ${myDog.breed}<br><br>Calling speak() method (overridden in Dog class): ${myDog.speak()}<br><br>Calling fetch() method (specific to Dog class): ${myDog.fetch()}`;
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        });
+        
+        document.getElementById('callStaticMethod').addEventListener('click', function() {
+            outputText.innerHTML = `Calling static method Animal.info(): ${Animal.info()}<br><br>Note: Static methods are called on the class itself, not on instances.<br>Trying to call info() on an instance would cause an error.`;
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        });
+        
+        document.getElementById('callInheritedMethod').addEventListener('click', function() {
+            if (myDog) {
+                outputText.innerHTML = `Dog instance inherited from Animal:<br>Name: ${myDog.name}, Age: ${myDog.age} years<br><br>Even though Dog class doesn't define name/age properties directly, it inherited them from Animal class via the 'super()' call in its constructor.`;
+            } else {
+                outputText.innerHTML = `Please create a Dog instance first by clicking "Create Dog" button.`;
+            }
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        });
+        
+        document.getElementById('clearOutput').addEventListener('click', function() {
+            outputText.innerHTML = "Output cleared. Click buttons to see new results...";
+        });
+    </script>
+</body>
+</html>
