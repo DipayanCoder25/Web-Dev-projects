@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Mapper & Sorter - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+            gap: 30px;
+        }
+        
+        .demo-section, .results-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .demo-description {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #6a11cb;
+        }
+        
+        .demo-description h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .demo-description p {
+            margin-bottom: 10px;
+        }
+        
+        .operation-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .operation-btn {
+            padding: 12px 20px;
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .operation-btn:hover {
+            background-color: #5a0db3;
+            transform: translateY(-2px);
+        }
+        
+        .operation-btn.active {
+            background-color: #2575fc;
+            box-shadow: 0 4px 8px rgba(37, 117, 252, 0.3);
+        }
+        
+        .current-operation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #eef2ff;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .operation-detail {
+            color: #6a11cb;
+            font-weight: 700;
+        }
+        
+        .results-container {
+            background-color: #f9fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #eef1f7;
+        }
+        
+        .array-display {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e5ec;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        
+        .array-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #6a11cb;
+        }
+        
+        .array-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .array-item {
+            background-color: #eef2ff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .array-item.original {
+            background-color: #e0f7fa;
+        }
+        
+        .array-item.mapped {
+            background-color: #e8f5e9;
+        }
+        
+        .array-item.ascending {
+            background-color: #fff3e0;
+        }
+        
+        .array-item.descending {
+            background-color: #ffebee;
+        }
+        
+        .code-snippet {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .code-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #90cdf4;
+        }
+        
+        .code-line {
+            margin-bottom: 5px;
+        }
+        
+        .code-comment {
+            color: #a0aec0;
+        }
+        
+        .code-keyword {
+            color: #fbb6ce;
+        }
+        
+        .code-function {
+            color: #90cdf4;
+        }
+        
+        .code-value {
+            color: #9ae6b4;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .operation-btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Array Mapper & Sorter - Demo</h1>
+            <p class="subtitle">Demonstrating array operations without user input</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="demo-section">
+                <h2 class="section-title">Demo Configuration</h2>
+                
+                <div class="demo-description">
+                    <h3>How This Demo Works:</h3>
+                    <p>This demo uses a predefined array: <strong>[12, 5, 8, 21, 3, 17, 9, 14]</strong></p>
+                    <p>Click on any operation button to apply that mapping operation to the array.</p>
+                    <p>The results will show the original array, mapped array, and both ascending and descending sorted versions.</p>
+                </div>
+                
+                <div class="operation-controls">
+                    <button class="operation-btn active" data-operation="double">Double (×2)</button>
+                    <button class="operation-btn" data-operation="square">Square (×²)</button>
+                    <button class="operation-btn" data-operation="increment">Increment (+1)</button>
+                    <button class="operation-btn" data-operation="decrement">Decrement (-1)</button>
+                    <button class="operation-btn" data-operation="half">Half (÷2)</button>
+                    <button class="operation-btn" data-operation="negate">Negate (×-1)</button>
+                </div>
+                
+                <div class="current-operation">
+                    Current Operation: <span class="operation-detail">Double (multiply each element by 2)</span>
+                </div>
+                
+                <div class="code-snippet">
+                    <div class="code-title">JavaScript Code Preview:</div>
+                    <div class="code-line"><span class="code-comment">// Original array</span></div>
+                    <div class="code-line"><span class="code-keyword">const</span> originalArray = [<span class="code-value">12</span>, <span class="code-value">5</span>, <span class="code-value">8</span>, <span class="code-value">21</span>, <span class="code-value">3</span>, <span class="code-value">17</span>, <span class="code-value">9</span>, <span class="code-value">14</span>];</div>
+                    <div class="code-line">&nbsp;</div>
+                    <div class="code-line"><span class="code-comment">// Map the array (example with double operation)</span></div>
+                    <div class="code-line"><span class="code-keyword">const</span> mappedArray = originalArray.<span class="code-function">map</span>(num => num * <span class="code-value">2</span>);</div>
+                    <div class="code-line">&nbsp;</div>
+                    <div class="code-line"><span class="code-comment">// Sort in ascending order</span></div>
+                    <div class="code-line"><span class="code-keyword">const</span> ascendingArray = [...mappedArray].<span class="code-function">sort</span>((a, b) => a - b);</div>
+                    <div class="code-line">&nbsp;</div>
+                    <div class="code-line"><span class="code-comment">// Sort in descending order</span></div>
+                    <div class="code-line"><span class="code-keyword">const</span> descendingArray = [...mappedArray].<span class="code-function">sort</span>((a, b) => b - a);</div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title">Results</h2>
+                
+                <div class="results-container">
+                    <div class="array-display">
+                        <div class="array-title">Original Array:</div>
+                        <div class="array-content" id="originalArray">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="array-display">
+                        <div class="array-title">Mapped Array:</div>
+                        <div class="array-content" id="mappedArray">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="array-display">
+                        <div class="array-title">Ascending Order:</div>
+                        <div class="array-content" id="ascendingArray">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="array-display">
+                        <div class="array-title">Descending Order:</div>
+                        <div class="array-content" id="descendingArray">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Predefined array (no input from website)
+        const originalArray = [12, 5, 8, 21, 3, 17, 9, 14];
+        
+        // DOM Elements
+        const originalArrayDisplay = document.getElementById('originalArray');
+        const mappedArrayDisplay = document.getElementById('mappedArray');
+        const ascendingArrayDisplay = document.getElementById('ascendingArray');
+        const descendingArrayDisplay = document.getElementById('descendingArray');
+        const operationButtons = document.querySelectorAll('.operation-btn');
+        const currentOperationDisplay = document.querySelector('.operation-detail');
+        const codeSnippet = document.querySelector('.code-snippet .code-line:nth-child(6)');
+        
+        // Operation descriptions
+        const operationDescriptions = {
+            double: "Double (multiply each element by 2)",
+            square: "Square (multiply each element by itself)",
+            increment: "Increment (add 1 to each element)",
+            decrement: "Decrement (subtract 1 from each element)",
+            half: "Half (divide each element by 2)",
+            negate: "Negate (multiply each element by -1)"
+        };
+        
+        // Operation functions
+        const operationFunctions = {
+            double: num => num * 2,
+            square: num => num * num,
+            increment: num => num + 1,
+            decrement: num => num - 1,
+            half: num => num / 2,
+            negate: num => num * -1
+        };
+        
+        // Operation code examples
+        const operationCodeExamples = {
+            double: 'const mappedArray = originalArray.map(num => num * 2);',
+            square: 'const mappedArray = originalArray.map(num => num * num);',
+            increment: 'const mappedArray = originalArray.map(num => num + 1);',
+            decrement: 'const mappedArray = originalArray.map(num => num - 1);',
+            half: 'const mappedArray = originalArray.map(num => num / 2);',
+            negate: 'const mappedArray = originalArray.map(num => num * -1);'
+        };
+        
+        // Initialize with default operation
+        let currentOperation = 'double';
+        
+        // Function to process the array with the current operation
+        function processArray() {
+            // Map the array based on selected operation
+            const mappedArray = originalArray.map(operationFunctions[currentOperation]);
+            
+            // Sort arrays
+            const ascendingArray = [...mappedArray].sort((a, b) => a - b);
+            const descendingArray = [...mappedArray].sort((a, b) => b - a);
+            
+            // Display results
+            displayArray(originalArrayDisplay, originalArray, 'original');
+            displayArray(mappedArrayDisplay, mappedArray, 'mapped');
+            displayArray(ascendingArrayDisplay, ascendingArray, 'ascending');
+            displayArray(descendingArrayDisplay, descendingArray, 'descending');
+            
+            // Update current operation display
+            currentOperationDisplay.textContent = operationDescriptions[currentOperation];
+            
+            // Update code snippet
+            updateCodeSnippet();
+        }
+        
+        // Display an array in the specified container
+        function displayArray(container, array, type) {
+            container.innerHTML = '';
+            
+            if (array.length === 0) {
+                container.innerHTML = '<span class="array-item">No data</span>';
+                return;
+            }
+            
+            array.forEach(item => {
+                const itemElement = document.createElement('span');
+                itemElement.className = `array-item ${type}`;
+                
+                // Format number to avoid long decimals
+                const formattedNumber = 
+                    Number.isInteger(item) ? 
+                    item.toString() : 
+                    item.toFixed(2).replace(/\.00$/, '');
+                
+                itemElement.textContent = formattedNumber;
+                container.appendChild(itemElement);
+            });
+        }
+        
+        // Update the code snippet based on current operation
+        function updateCodeSnippet() {
+            if (codeSnippet) {
+                codeSnippet.innerHTML = `<span class="code-keyword">const</span> mappedArray = originalArray.<span class="code-function">map</span>(num => ${getOperationCode(currentOperation)});`;
+            }
+        }
+        
+        // Get the operation code for display
+        function getOperationCode(operation) {
+            switch(operation) {
+                case 'double': return 'num * <span class="code-value">2</span>';
+                case 'square': return 'num * num';
+                case 'increment': return 'num + <span class="code-value">1</span>';
+                case 'decrement': return 'num - <span class="code-value">1</span>';
+                case 'half': return 'num / <span class="code-value">2</span>';
+                case 'negate': return 'num * <span class="code-value">-1</span>';
+                default: return 'num';
+            }
+        }
+        
+        // Set active operation button
+        function setActiveOperation(operation) {
+            operationButtons.forEach(btn => {
+                if (btn.dataset.operation === operation) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            // Display initial results
+            processArray();
+            
+            // Add event listeners to operation buttons
+            operationButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currentOperation = this.dataset.operation;
+                    setActiveOperation(currentOperation);
+                    processArray();
+                });
+            });
+        };
+    </script>
+</body>
+</html>
