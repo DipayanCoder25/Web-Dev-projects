@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Loop News</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: monospace;
+        }
+
+        .ticker {
+            width: 90%;
+            height: 80vh;
+            background: #111;
+            border: 2px solid #0ff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .news-loop {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            animation: loopUp 30s linear infinite;
+        }
+
+        .news-item {
+            padding: 20px;
+            color: #fff;
+            border-bottom: 1px solid #333;
+            font-size: 18px;
+            background: #222;
+            display: flex;
+            gap: 15px;
+        }
+
+        .news-item:nth-child(odd) {
+            background: #1a1a1a;
+        }
+
+        .time {
+            color: #0ff;
+            font-weight: bold;
+            min-width: 80px;
+        }
+
+        @keyframes loopUp {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        /* Create seamless loop by having two identical sets */
+        .news-loop::after {
+            content: "";
+            display: block;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticker">
+        <div class="news-loop">
+            <div class="news-item">
+                <span class="time">10:45</span>
+                <span>Breaking news: Major event reported</span>
+            </div>
+            <div class="news-item">
+                <span class="time">10:30</span>
+                <span>Global markets show strong recovery</span>
+            </div>
+            <div class="news-item">
+                <span class="time">10:15</span>
+                <span>Technology breakthrough announced today</span>
+            </div>
+            <div class="news-item">
+                <span class="time">10:00</span>
+                <span>Sports championship enters final round</span>
+            </div>
+            <div class="news-item">
+                <span class="time">09:45</span>
+                <span>Weather alert for coastal regions</span>
+            </div>
+            <div class="news-item">
+                <span class="time">09:30</span>
+                <span>New policy changes announced by government</span>
+            </div>
+            <!-- Duplicate for loop -->
+            <div class="news-item">
+                <span class="time">10:45</span>
+                <span>Breaking news: Major event reported</span>
+            </div>
+            <div class="news-item">
+                <span class="time">10:30</span>
+                <span>Global markets show strong recovery</span>
+            </div>
+            <div class="news-item">
+                <span class="time">10:15</span>
+                <span>Technology breakthrough announced today</span>
+            </div>
+            <div class="news-item">
+                <span class="time">10:00</span>
+                <span>Sports championship enters final round</span>
+            </div>
+            <div class="news-item">
+                <span class="time">09:45</span>
+                <span>Weather alert for coastal regions</span>
+            </div>
+            <div class="news-item">
+                <span class="time">09:30</span>
+                <span>New policy changes announced by government</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple pause on hover
+        document.querySelector('.ticker').addEventListener('mouseenter', () => {
+            document.querySelector('.news-loop').style.animationPlayState = 'paused';
+        });
+        
+        document.querySelector('.ticker').addEventListener('mouseleave', () => {
+            document.querySelector('.news-loop').style.animationPlayState = 'running';
+        });
+    </script>
+</body>
+</html>
