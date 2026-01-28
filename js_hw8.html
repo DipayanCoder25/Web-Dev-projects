@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mini Shop</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+    }
+
+    .container {
+      width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1976D2;
+    }
+
+    .product, .cart-item {
+      background: #eef;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .cart-item {
+      background: #dff0d8;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Online Shop</h2>
+  <button onclick="loadProducts()">Load Products</button>
+
+  <div id="products"></div>
+
+  <h3>Cart</h3>
+  <div id="cart">Cart is empty</div>
+</div>
+
+<script>
+const productJSON = [
+  { id: 1, name: "Laptop", price: 800 },
+  { id: 2, name: "Headphone", price: 50 },
+  { id: 3, name: "Mouse", price: 20 }
+];
+
+let cart = [];
+
+function fetchProducts() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(productJSON);
+    }, 1500);
+  });
+}
+
+async function loadProducts() {
+  const productDiv = document.getElementById("products");
+  productDiv.innerHTML = "⏳ Loading products...";
+
+  const products = await fetchProducts();
+  productDiv.innerHTML = "";
+
+  products.forEach(product => {
+    productDiv.innerHTML += `
+      <div class="product">
+        <strong>${product.name}</strong><br>
+        Price: $${product.price}<br>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+      </div>
+    `;
+  });
+}
+
+function addToCart(id) {
+  const product = productJSON.find(p => p.id === id);
+  if (!product) return;
+
+  cart.push(product);
+  updateCart();
+}
+
+function updateCart() {
+  const cartDiv = document.getElementById("cart");
+
+  if (cart.length === 0) {
+    cartDiv.innerHTML = "Cart is empty";
+    return;
+  }
+
+  let total = 0;
+  cartDiv.innerHTML = "";
+
+  cart.forEach(item => {
+    total += item.price;
+    cartDiv.innerHTML += `
+      <div class="cart-item">
+        ${item.name} - $${item.price}
+      </div>
+    `;
+  });
+
+  cartDiv.innerHTML += `<strong>Total: $${total}</strong>`;
+}
+</script>
+
+</body>
+</html>
