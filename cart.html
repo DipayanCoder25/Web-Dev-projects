@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ShopEasy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+body { margin:0; font-family: Arial; background:#eee; }
+
+.navbar {
+    background:#131921;
+    color:white;
+    padding:12px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.container {
+    padding:20px;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+    gap:15px;
+}
+
+.product {
+    background:white;
+    padding:10px;
+    border-radius:6px;
+}
+
+.product img {
+    width:100%;
+    height:160px;
+    object-fit:contain;
+}
+
+.price { color:#b12704; font-weight:bold; }
+
+button {
+    padding:8px 12px;
+    margin-top:5px;
+    cursor:pointer;
+}
+
+.modal {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background:white;
+    width:90%;
+    max-width:420px;
+    margin:80px auto;
+    padding:20px;
+}
+
+.modal-content img {
+    width:100%;
+    height:200px;
+    object-fit:contain;
+}
+
+.close {
+    float:right;
+    cursor:pointer;
+}
+
+.cart-item {
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid #ccc;
+    padding:8px 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h3>ShopEasy</h3>
+    <button onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
+</div>
+
+<!-- PRODUCTS -->
+<div class="container" id="productList"></div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal" id="productModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeProduct()">✖</span>
+        <img id="mImg">
+        <h3 id="mName"></h3>
+        <p id="mDesc"></p>
+        <p class="price" id="mPrice"></p>
+        <button onclick="addToCart()">Add to Cart</button>
+    </div>
+</div>
+
+<!-- CART MODAL -->
+<div class="modal" id="cartModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCart()">✖</span>
+        <h3>Your Cart</h3>
+        <div id="cartItems"></div>
+        <h4>Total: $<span id="totalPrice">0</span></h4>
+    </div>
+</div>
+
+<script>
+/* PRODUCTS */
+var products = [
+    {
+        name:"Wireless Headphones",
+        price:99,
+        img:"wireless_headphone.jpg",
+        desc:"Premium wireless headphones with noise cancellation."
+    },
+    {
+        name:"Smart Watch",
+        price:149,
+        img:"https://images.unsplash.com/photo-1698729617018-7475086abd54",
+        desc:"Track fitness and notifications with ease."
+    },
+    {
+        name:"Gaming Mouse",
+        price:59,
+        img:"https://images.unsplash.com/photo-1613141412501-9012977f1969",
+        desc:"High precision gaming mouse."
+    },
+    {
+        name:"Laptop Backpack",
+        price:79,
+        img:"https://images.unsplash.com/photo-1668114844900-537ab91478b9",
+        desc:"Durable backpack with laptop protection."
+    },
+    {
+        name:"Bluetooth Speaker",
+        price:89,
+        img:"https://images.unsplash.com/photo-1589256469067-ea99122bbdc4",
+        desc:"Portable speaker with deep bass."
+    },
+    {
+        name:"Gaming Monitor",
+        price:699,
+        img:"https://images.unsplash.com/photo-1648911476191-6de64b45b024",
+        desc:"High refresh rate gaming monitor."
+    },
+    {
+        name:"Gaming Chair",
+        price:399,
+        img:"https://images.unsplash.com/photo-1670946839270-cc4febd43b09",
+        desc:"Ergonomic chair for long sessions."
+    },
+    {
+        name:"Gaming PC",
+        price:5000,
+        img:"gaming_pc.jpg",
+        desc:"High-end gaming PC powerhouse."
+    },
+    {
+        name:"Smartphone",
+        price:699,
+        img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
+        desc:"Latest generation smartphone."
+    },
+    {
+        name:"Mechanical Keyboard",
+        price:109,
+        img:"https://images.unsplash.com/photo-1624696941338-934bf86c28b4",
+        desc:"Mechanical keyboard with RGB."
+    }
+];
+
+var cart = [];
+var selectedProduct = null;
+
+/* SHOW PRODUCTS */
+var list = document.getElementById("productList");
+
+for (var i = 0; i < products.length; i++) {
+    list.innerHTML += `
+        <div class="product">
+            <img src="${products[i].img}">
+            <h4>${products[i].name}</h4>
+            <p class="price">$${products[i].price}</p>
+            <button onclick="openProduct(${i})">View</button>
+        </div>
+    `;
+}
+
+/* PRODUCT MODAL */
+function openProduct(index) {
+    selectedProduct = products[index];
+    document.getElementById("mImg").src = selectedProduct.img;
+    document.getElementById("mName").innerText = selectedProduct.name;
+    document.getElementById("mDesc").innerText = selectedProduct.desc;
+    document.getElementById("mPrice").innerText = "$" + selectedProduct.price;
+    document.getElementById("productModal").style.display = "block";
+}
+
+function closeProduct() {
+    document.getElementById("productModal").style.display = "none";
+}
+
+/* CART */
+function addToCart() {
+    var found = false;
+
+    for (var i = 0; i < cart.length; i++) {
+        if (cart[i].name === selectedProduct.name) {
+            cart[i].qty++;
+            found = true;
+        }
+    }
+
+    if (!found) {
+        cart.push({name:selectedProduct.name, price:selectedProduct.price, qty:1});
+    }
+
+    closeProduct();
+    updateCart();
+}
+
+function openCart() {
+    document.getElementById("cartModal").style.display = "block";
+}
+
+function closeCart() {
+    document.getElementById("cartModal").style.display = "none";
+}
+
+function updateCart() {
+    var box = document.getElementById("cartItems");
+    box.innerHTML = "";
+
+    var total = 0;
+    var count = 0;
+
+    for (var i = 0; i < cart.length; i++) {
+        total += cart[i].price * cart[i].qty;
+        count += cart[i].qty;
+
+        box.innerHTML += `
+            <div class="cart-item">
+                ${cart[i].name} (${cart[i].qty})
+                <div>
+                    <button onclick="cart[${i}].qty--; if(cart[${i}].qty<1){cart.splice(${i},1)} updateCart()">-</button>
+                    <button onclick="cart[${i}].qty++; updateCart()">+</button>
+                </div>
+            </div>
+        `;
+    }
+
+    document.getElementById("cartCount").innerText = count;
+    document.getElementById("totalPrice").innerText = total;
+}
+</script>
+
+</body>
+</html>
