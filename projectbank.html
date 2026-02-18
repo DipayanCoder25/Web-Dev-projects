@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>plain bank · income & expense</title>
+    <!-- Font Awesome for minimal icons (only trash & pencil, but we use trash) — light and common -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #f0f3f7 0%, #e9eef3 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .bank-card {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 20, 30, 0.25), 
+                        0 2px 8px rgba(0,0,0,0.03);
+            padding: 2rem 2rem 2.2rem;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: all 0.2s;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 550;
+            letter-spacing: -0.02em;
+            color: #1b2e3c;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.2rem;
+        }
+        h1 i {
+            color: #2f6e8a;
+            font-size: 2rem;
+        }
+        .subhead {
+            font-size: 0.9rem;
+            color: #4e6a7c;
+            margin-bottom: 1.8rem;
+            border-left: 3px solid #78b9d8;
+            padding-left: 1rem;
+            font-weight: 400;
+        }
+        .balance-panel {
+            background: #ffffffd9;
+            border-radius: 2rem;
+            padding: 1.6rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 1px 4px #ffffff, 0 8px 18px -8px rgba(30,60,80,0.2);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .balance-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #2c5770;
+            font-weight: 500;
+        }
+        .balance-amount {
+            font-size: 3.2rem;
+            font-weight: 600;
+            color: #103544;
+            line-height: 1.1;
+            word-break: break-word;
+        }
+        .balance-amount small {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #537888;
+            margin-right: 0.3rem;
+        }
+        .row-stats {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 2.2rem;
+            flex-wrap: wrap;
+        }
+        .stat {
+            background: white;
+            flex: 1 1 160px;
+            border-radius: 1.5rem;
+            padding: 1.3rem 1.2rem;
+            box-shadow: 0 12px 24px -16px rgba(0,40,60,0.2);
+            border: 1px solid rgba(200,220,240,0.6);
+            transition: transform 0.1s ease;
+        }
+        .stat:hover {
+            transform: scale(1.01);
+            background: #fefefe;
+        }
+        .stat-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #5b7f94;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 550;
+            line-height: 1.2;
+            color: #1b3b4b;
+        }
+        .stat-number.income {
+            color: #1f7a5a;
+        }
+        .stat-number.expense {
+            color: #c3514b;
+        }
+        .stat small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #6f8b9b;
+        }
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 1.8rem 0 1rem 0;
+        }
+        .transactions-header h2 {
+            font-size: 1.4rem;
+            font-weight: 530;
+            color: #213e4d;
+        }
+        .transactions-header span {
+            font-size: 0.8rem;
+            background: #d6e5ef;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            color: #1a4d63;
+        }
+        .transaction-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 0.3rem;
+            scrollbar-width: thin;
+            scrollbar-color: #acc9db #e2ecf3;
+        }
+        .transaction-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .transaction-list::-webkit-scrollbar-track {
+            background: #e2ecf3;
+            border-radius: 20px;
+        }
+        .transaction-list::-webkit-scrollbar-thumb {
+            background: #acc9db;
+            border-radius: 20px;
+        }
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffffdd;
+            backdrop-filter: blur(2px);
+            margin: 0.7rem 0;
+            padding: 1rem 1.3rem;
+            border-radius: 2.5rem;
+            border: 1px solid rgba(210, 230, 245, 0.7);
+            box-shadow: 0 4px 8px -4px rgba(0,0,0,0.02);
+            transition: all 0.15s;
+        }
+        .transaction-item:hover {
+            background: white;
+            border-color: #b4d0e5;
+            box-shadow: 0 8px 14px -10px #2e5d7e30;
+        }
+        .transaction-desc {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .transaction-desc i {
+            width: 1.8rem;
+            height: 1.8rem;
+            background: #f0f9ff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #317399;
+            font-size: 0.9rem;
+        }
+        .transaction-desc .desc-text {
+            font-weight: 500;
+            color: #1e3e4f;
+            word-break: break-word;
+            max-width: 220px;
+        }
+        .transaction-amount {
+            font-weight: 600;
+            font-size: 1.3rem;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .transaction-amount.income {
+            color: #1f7a5a;
+        }
+        .transaction-amount.expense {
+            color: #c3514b;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: #a1b9c9;
+            cursor: pointer;
+            padding: 0.3rem 0.5rem;
+            border-radius: 2rem;
+            transition: 0.1s;
+            line-height: 1;
+        }
+        .delete-btn:hover {
+            color: #c02f2f;
+            background: #ffe7e7;
+            transform: scale(1.1);
+        }
+        .add-section {
+            background: #eef4f9b0;
+            border-radius: 2rem;
+            padding: 1.5rem 1.8rem;
+            margin-top: 1rem;
+            border: 1px solid #c6ddee;
+        }
+        .add-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1c4e68;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            align-items: flex-end;
+        }
+        .input-group {
+            flex: 2 1 180px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #4b738a;
+            margin-bottom: 0.2rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .input-field {
+            width: 100%;
+            background: white;
+            border: 1px solid #c7ddec;
+            border-radius: 3rem;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.15s;
+            color: #1c3d4f;
+        }
+        .input-field:focus {
+            border-color: #5499c4;
+            box-shadow: 0 0 0 3px #a2cfef80;
+        }
+        .type-selector {
+            display: flex;
+            gap: 1rem;
+            background: #ddeaf3;
+            padding: 0.2rem 0.2rem;
+            border-radius: 3rem;
+            margin-top: 0.2rem;
+        }
+        .type-option {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem 0.2rem;
+            border-radius: 3rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #3d6073;
+            transition: 0.1s;
+            background: transparent;
+            border: none;
+        }
+        .type-option.active {
+            background: white;
+            color: #1b5a7a;
+            box-shadow: 0 3px 8px -4px #2b5f7a60;
+        }
+        #income-radio, #expense-radio {
+            display: none;
+        }
+        .add-btn {
+            background: #236b95;
+            border: none;
+            color: white;
+            font-weight: 500;
+            padding: 0.85rem 2rem;
+            border-radius: 4rem;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 12px 18px -14px #0c3348;
+            cursor: pointer;
+            border: 1px solid #ffffff40;
+            transition: 0.15s;
+            flex: 1 0 auto;
+            justify-content: center;
+        }
+        .add-btn:hover {
+            background: #1f7eac;
+            transform: scale(1.01);
+            box-shadow: 0 14px 22px -12px #0f344b;
+        }
+        .empty-message {
+            text-align: center;
+            color: #98b4c9;
+            padding: 2rem 0;
+            font-style: italic;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, #c5dcee, transparent);
+            margin: 1rem 0;
+        }
+        footer {
+            font-size: 0.7rem;
+            color: #7899ad;
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="bank-card">
+        <h1><i class="fas fa-piggy-bank"></i> plain bank</h1>
+        <div class="subhead">track income · expenses · no cloud</div>
+
+        <!-- balance card -->
+        <div class="balance-panel">
+            <div class="balance-label">YOUR BALANCE</div>
+            <div class="balance-amount" id="balanceDisplay"><small>$</small>0.00</div>
+        </div>
+
+        <!-- income / expense summary -->
+        <div class="row-stats">
+            <div class="stat">
+                <div class="stat-title"><i class="fas fa-arrow-down" style="color:#2e9a77;"></i> INCOME</div>
+                <div class="stat-number income" id="totalIncome">$0.00</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title"><i class="fas fa-arrow-up" style="color:#ca4e48;"></i> EXPENSE</div>
+                <div class="stat-number expense" id="totalExpense">$0.00</div>
+            </div>
+        </div>
+
+        <!-- transaction list -->
+        <div class="transactions-header">
+            <h2><i class="fas fa-list-ul" style="font-size: 1rem;"></i> transactions</h2>
+            <span id="transactionCount">0 items</span>
+        </div>
+        <ul class="transaction-list" id="transactionList">
+            <li class="empty-message">no entries yet — add one below</li>
+        </ul>
+
+        <!-- add new transaction (minimal js) -->
+        <div class="add-section">
+            <div class="add-title"><i class="fas fa-plus-circle"></i> new record</div>
+            <div class="form-row">
+                <div class="input-group">
+                    <label>description</label>
+                    <input type="text" id="descInput" class="input-field" placeholder="coffee, salary ..." autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label>amount ($)</label>
+                    <input type="number" id="amountInput" class="input-field" placeholder="0.00" step="0.01" min="0.01">
+                </div>
+            </div>
+            <!-- custom radio toggle (type) -->
+            <div style="margin: 1rem 0 0.8rem 0;">
+                <span style="font-size:0.75rem; color:#4b738a;">TYPE</span>
+                <div class="type-selector" id="typeSelector">
+                    <span class="type-option active" data-type="income"><i class="fas fa-arrow-down"></i> income</span>
+                    <span class="type-option" data-type="expense"><i class="fas fa-arrow-up"></i> expense</span>
+                </div>
+                <!-- hidden radios for js-less behaviour (but we use js anyway) -->
+                <input type="radio" name="typeRadio" id="income-radio" value="income" checked hidden>
+                <input type="radio" name="typeRadio" id="expense-radio" value="expense" hidden>
+            </div>
+            <button class="add-btn" id="addTransactionBtn"><i class="fas fa-save"></i> add transaction</button>
+        </div>
+        <footer>↓ click on ✕ to delete · all data in memory</footer>
+    </div>
+
+   <script>
+    
+        (function() {
+      
+            let transactions = [];
+
+            // DOM elements
+            const balanceEl = document.getElementById('balanceDisplay');
+            const totalIncomeEl = document.getElementById('totalIncome');
+            const totalExpenseEl = document.getElementById('totalExpense');
+            const transactionListEl = document.getElementById('transactionList');
+            const transactionCountEl = document.getElementById('transactionCount');
+            const descInput = document.getElementById('descInput');
+            const amountInput = document.getElementById('amountInput');
+            const addBtn = document.getElementById('addTransactionBtn');
+            
+            // type toggling (minimal ui logic)
+            const typeOptions = document.querySelectorAll('.type-option');
+            const incomeRadio = document.getElementById('income-radio');
+            const expenseRadio = document.getElementById('expense-radio');
+            
+            let currentType = 'income';  // default
+
+            // toggle UI and hidden radio
+            typeOptions.forEach(opt => {
+                opt.addEventListener('click', function(e) {
+                    typeOptions.forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    const type = this.dataset.type; // 'income' or 'expense'
+                    currentType = type;
+                    if (type === 'income') {
+                        incomeRadio.checked = true;
+                    } else {
+                        expenseRadio.checked = true;
+                    }
+                });
+            });
+
+            // helper: format currency
+            const formatMoney = (value) => {
+                return value.toFixed(2);
+            };
+
+            // update totals and balance
+            function updateStats() {
+                let incomeTotal = 0;
+                let expenseTotal = 0;
+                transactions.forEach(t => {
+                    if (t.type === 'income') incomeTotal += t.amount;
+                    else expenseTotal += t.amount;
+                });
+                const balance = incomeTotal - expenseTotal;
+                
+                balanceEl.innerHTML = `<small>$</small>${formatMoney(balance)}`;
+                totalIncomeEl.innerText = `$${formatMoney(incomeTotal)}`;
+                totalExpenseEl.innerText = `$${formatMoney(expenseTotal)}`;
+                transactionCountEl.innerText = `${transactions.length} item${transactions.length !== 1 ? 's' : ''}`;
+            }
+            function renderTransactions() {
+                if (transactions.length === 0) {
+                    transactionListEl.innerHTML = '<li class="empty-message">no entries yet — add one below</li>';
+                    updateStats();
+                    return;
+                }
+
+                let html = '';
+                transactions.forEach(t => {
+                    const amountClass = t.type === 'income' ? 'income' : 'expense';
+                    const icon = t.type === 'income' ? 'fa-arrow-down' : 'fa-arrow-up';
+                    const sign = t.type === 'income' ? '' : '-';  // just visual, we show absolute with color
+                    html += `
+                        <li class="transaction-item" data-id="${t.id}">
+                            <div class="transaction-desc">
+                                <i class="fas ${icon}" style="background: ${t.type === 'income' ? '#e0f3ea' : '#fdeae9'}; color: ${t.type === 'income' ? '#1f7a5a' : '#c3514b'};"></i>
+                                <span class="desc-text">${escapeHtml(t.description) || '—'}</span>
+                            </div>
+                            <div class="transaction-amount ${amountClass}">
+                                ${sign}$${formatMoney(Math.abs(t.amount))}
+                                <button class="delete-btn" data-id="${t.id}" title="delete"><i class="fas fa-times"></i></button>
+                            </div>
+                        </li>
+                    `;
+                });
+                transactionListEl.innerHTML = html;
+                updateStats();
+            }
+            function escapeHtml(unsafe) {
+                if (!unsafe) return unsafe;
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            // add new transaction
+            function addTransaction() {
+                const description = descInput.value.trim();
+                const amountRaw = amountInput.value.trim();
+
+                if (!description) {
+                    alert('please enter a description');
+                    return;
+                }
+                if (!amountRaw) {
+                    alert('please enter an amount');
+                    return;
+                }
+                const amount = parseFloat(amountRaw);
+                if (isNaN(amount) || amount <= 0) {
+                    alert('amount must be a positive number');
+                    return;
+                }
+
+                // use currentType from toggle
+                const type = currentType; 
+
+                const newTransaction = {
+                    id: Date.now() + Math.floor(Math.random() * 1000),   // simple unique id
+                    description: description,
+                    amount: amount,
+                    type: type
+                };
+
+                transactions.push(newTransaction);
+                renderTransactions();
+
+                descInput.value = '';
+                amountInput.value = '';
+               
+                descInput.focus();
+            }
+
+            transactionListEl.addEventListener('click', (e) => {
+                const deleteButton = e.target.closest('.delete-btn');
+                if (deleteButton) {
+                    const id = deleteButton.getAttribute('data-id');
+                    if (id) {
+            
+                        transactions = transactions.filter(t => t.id != id);  
+                        renderTransactions();
+                    }
+                    e.stopPropagation();
+                }
+            });
+
+            // add button click
+            addBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                addTransaction();
+            });
+
+            [descInput, amountInput].forEach(input => {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addTransaction();
+                    }
+                });
+            });
+
+            renderTransactions();
+
+         
+            if (transactions.length === 0) {
+                // small demo data
+                transactions.push({ id: 1001, description: 'salary (demo)', amount: 3250.00, type: 'income' });
+                transactions.push({ id: 1002, description: 'groceries', amount: 98.75, type: 'expense' });
+                transactions.push({ id: 1003, description: 'coffee shop', amount: 12.50, type: 'expense' });
+                renderTransactions();
+            }
+        })();
+    </script>
+</body>
+</html>
