@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Class 1 - Selection & Traversal</title>
+    
+</head>
+
+<body>
+    <header id="main-header" data-category="navigation">
+        <h1 id="main-title" class="title highlight">DOM Selection Deep Dive</h1>
+        <p class="subtitle">Learn how JavaScript views HTML elements as nodes.</p>
+    </header>
+
+    <main id="app-container">
+        <section class="card" id="user-section">
+            <h2 class="section-title">User List</h2>
+            <ul class="user-list" id="users">
+                <li class="user-item active" data-id="101" data-role="admin">Alex (Admin)</li>
+                <li class="user-item" data-id="102" data-role="editor">Sam (Editor)</li>
+                <li class="user-item" data-id="103" data-role="viewer">Taylor (Viewer)</li>
+            </ul>
+        </section>
+
+        <section class="card" id="actions-section">
+            <h2 class="section-title">Actions</h2>
+            <button type="button" class="btn btn-primary">Save Changes</button>
+            <button type="button" class="btn btn-secondary">Cancel</button>
+            <button type="button" class="btn btn-danger" disabled>Delete Account</button>
+        </section>
+    </main>
+    <script>
+        let mainTitle = document.getElementById("main-title").innerText;
+        console.log("2. Main Title:", mainTitle);
+
+        let firstCard = document.querySelector(".card");
+        console.log("3. First Card:", firstCard);
+
+        let activeUser = document.querySelector(".user-item.active");
+        console.log("4. Active User:", activeUser.innerText);
+
+        let cards = document.querySelectorAll(".card");
+        console.log("5. Total Cards:", cards.length);
+
+        let buttons = document.querySelectorAll(".btn");
+
+
+        let users = document.querySelectorAll(".user-item");
+
+        let admin = Array.from(users).find(user => user.dataset.role === "admin");
+        console.log("6. Found Admin via Array.find():", admin.innerText);
+
+        console.log("7. Editor User ID:", document.querySelector('[data-role="editor"]').dataset.id);
+
+        let userList = document.querySelector("#users");
+
+        console.log("8. Element Children:", userList.children);
+
+        console.log("9. First Child Element:", userList.firstElementChild.innerText);
+
+        console.log("10. Last Child Element:", userList.lastElementChild.innerText);
+
+        console.log("11. Direct Parent:", userList.parentElement);
+
+        console.log("12. Nearest Card ancestor:", userList.closest(".card").id);
+
+        console.log("13. Next Sibling:", userList.children[0].nextElementSibling.innerText);
+    </script>
+</body>
+
+</html>
